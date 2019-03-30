@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="5 seconds">
+    <property name="appName" value="registercenter"/>
+    <property name="logDir" value="logs" />
+    <contextName>registercenter</contextName>
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- 日志输出编码 -->
+        <encoder>
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+            <pattern>[TenantId:%X{tenantId}] %d %-5level %logger{36}:%L[%thread] - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <!-- 按照每天生成日志文件 -->
+    <appender name="rollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logDir}/${appName}.log</file>
+
+        <!-- 日志输出编码 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 日志输出文件名 -->
+            <fileNamePattern>${logDir}/${appName}.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- 日志保存的最大时间 -->
+            <maxHistory>6</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+            <pattern>[TenantId:%X{tenantId}] %d %-5level %logger{36}:%L[%thread] - %msg%n</pattern>
+        </encoder>
+
+        <!--日志文件最大的大小-->
+        <!-- <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+      <MaxFileSize>200MB</MaxFileSize>
+    </triggeringPolicy> -->
+    </appender>
+
+
+
+    <!-- 在程序的开发测试阶段，可以调整level的级别，常用级别优先级为： -->
+    <!-- TRACE < DEBUG < INFO < WARN < ERROR  -->
+    <logger name="cn.ce.ebiz" />
+    <logger name="org.springframework.boot"  level="WARN"/>
+
+    <!--log4jdbc -->
+    <logger name="jdbc.sqltiming" />
+    <logger name="jdbc.resultset" />
+
+    <root level="INFO">
+        <appender-ref ref="console" />
+        <appender-ref ref="rollingFile" />
+    </root>
+
+</configuration>
